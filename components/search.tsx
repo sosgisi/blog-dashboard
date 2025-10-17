@@ -19,14 +19,14 @@ export default function Search({placeholder}: {placeholder: string}) {
     }
 
     return (
-        <div className="relative">
-            <SearchRounded className="absolute left-3 top-[9px] opacity-50"/>
+        <div className="relative w-full p-5 pt-0 sm:p-0">
+            <SearchRounded className="absolute left-8 sm:left-3 top-[10px] opacity-50"/>
             <input 
                 type="text" 
                 placeholder={placeholder} 
                 onChange={(e) => handleSearch(e.target.value)}
                 defaultValue={searchParams.get('query')?.toString()}
-                className="pl-10 pr-4 py-2 rounded-full border border-foreground/20 focus:outline-none focus:ring focus:ring-foreground/50 bg-background/50 text-foreground outline-none"
+                className="w-full pl-10 pr-4 py-2 rounded-full border border-foreground/20 focus:outline-none focus:ring focus:ring-foreground/50 bg-background/50 text-foreground outline-none"
             />
         </div>
     )

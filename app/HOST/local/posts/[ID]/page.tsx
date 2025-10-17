@@ -1,18 +1,18 @@
 'use client'
 
 import Navbar from "@/components/navbar";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Post } from "../page";
 import { Button } from "@mui/material";
 import DeleteConfirmation from "@/components/delete-confirmation";
 import { atom, useSetAtom } from "jotai";
+import { Post } from "@/atoms/posts-atom";
 
 export const idAtom = atom(0);
 
-export default function DetailedPostPage({params}: {params: {ID: string}}) {
+export default function DetailedPostPage({params}: {params: Promise<{ID: string}>}) {
     
-    const { ID } = params;
+    const { ID } = use(params);
 
     const setId = useSetAtom(idAtom);
 
@@ -28,17 +28,17 @@ export default function DetailedPostPage({params}: {params: {ID: string}}) {
 
     return (
         <>
-        <Navbar/>
-        <div className="flex flex-col gap-5 m-20 px-10 py-5 bg-foreground/80 text-background rounded-lg">
-            <h1 className="flex justify-between items-center text-4xl">
+        <Navbar />
+        <div className="flex flex-col gap-5 m-5 sm:m-10 md:m-20 px-5 sm:px-10 py-2 sm:py-5 rounded-lg border border-gray-500 shadow-md">
+            <div className="flex justify-between items-center text-2xl sm:text-4xl">
                 <ReactMarkdown>{post?.title}</ReactMarkdown>
-                <h1 className="text-sm text-background/70">{post?.createdAt}</h1>
-            </h1>
-            <h1>
+                <h1 className="text-sm text-end opacity-50">{post?.createdAt}</h1>
+            </div>
+            <div className="whitespace-pre-line break-words">
                 <ReactMarkdown>{post?.content}</ReactMarkdown>
-            </h1>
+            </div>
         </div>
-        <div className="flex gap-3 justify-end mr-20">
+        <div className="flex gap-3 justify-end mr-5 sm:mr-10 md:mr-20">
             <Button href="/HOST/local/posts" variant="outlined" color="warning" className="m-5">Back to Posts</Button>
             <Button onClick={() => setDeleteClicked(true)} variant="contained" color="error">Delete</Button>
         </div>

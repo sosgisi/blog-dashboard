@@ -1,39 +1,46 @@
 'use client'
 
-import { limitPerPageAtom } from "@/atoms/posts-atom";
+import { allPostsAtom, limitPerPageAtom } from "@/atoms/posts-atom";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function Pagination() {
 
-    const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+    const allPosts = useAtomValue(allPostsAtom);
+    const [limitPerPage, setLimitPerPage] = useAtom(limitPerPageAtom);
 
-    const [limitPerPage, setLimitPerPage] = useAtom(limitPerPageAtom)
-
-    const totalPages = Math.ceil(posts.length / Number(limitPerPage));
+    // const totalPages = Math.ceil(posts.length / Number(limitPerPage));
 
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const params = new URLSearchParams(searchParams);
+    const query = searchParams.get('query') || '';
     const currentPage = Number(searchParams.get('page')) || 1;
 
+    const filteredPosts = useMemo(() => {
+        if (!query) return allPosts;
+        return allPosts.filter((post) => post.title.toLowerCase().includes(query.toLowerCase()));
+    }, [allPosts, query]);
+
+    const totalPages = Math.ceil(filteredPosts.length / limitPerPage);
+    const allPages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
     const createPageURL = (pageNumber: number | string) => {
+        const params = new URLSearchParams(searchParams);
         params.set('page', pageNumber.toString());
         return `${pathname}?${params.toString()}`;
     }
 
-    const allPages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
     useEffect(() => {
-        if(currentPage > totalPages){
-            params.set('page', '1');
-            router.replace(`${pathname}?${params.toString()}`);
+        if(currentPage > totalPages && totalPages > 0){
+            const newParams = new URLSearchParams(searchParams);
+            newParams.set('page', '1');
+            router.replace(`${pathname}?${newParams.toString()}`);
         }
-    }, [limitPerPage, totalPages, pathname, router, params]);
+    }, [currentPage, totalPages, pathname, router, searchParams]);
 
     return (
         <>
@@ -45,7 +52,6 @@ export default function Pagination() {
                 <option value="20" className="bg-background">20</option>
             </select>
         </div>
-        {/* <p className="mx-5 whitespace-nowrap">Showing {posts.length} to {posts.length} of {posts.length} entries</p> */}
         <div className="flex justify-start mt-5 w-fit">
             <div className="flex gap-3 rounded-xl shadow-md py-1 px-4">
                 {/* Previous button */}
@@ -54,7 +60,7 @@ export default function Pagination() {
                     className={`flex items-center gap-1 rounded-md border px-3 py-1 text-sm font-medium transition
                         ${currentPage === 1
                             ? 'cursor-default pointer-events-none border-gray-400 text-gray-400'
-                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 border-gray-300 text-gray-800 dark:text-gray-100'}
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white hover:text-white'}
                     `}
                     aria-disabled={currentPage === 1}
                 >
@@ -70,7 +76,7 @@ export default function Pagination() {
                         className={`rounded-md px-3 py-1 text-sm font-medium border transition
                             ${page === currentPage
                             ? 'bg-blue-600 text-white border-blue-600'
-                            : 'border-gray-300 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800' }
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-white dark:hover:text-white' }
                         `}
                     >
                         {page}
@@ -81,9 +87,9 @@ export default function Pagination() {
                 <Link
                     href={createPageURL(currentPage + 1)}
                     className={`flex items-center gap-1 rounded-md border px-3 py-1 text-sm font-medium transition
-                        ${currentPage === totalPages
+                        ${currentPage === totalPages || totalPages === 0
                             ? 'cursor-default pointer-events-none border-gray-400 text-gray-400'
-                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 border-gray-300 text-gray-800 dark:text-gray-100'}
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white hover:text-white'}
                         `}
                     aria-disabled={currentPage === totalPages}
                 >

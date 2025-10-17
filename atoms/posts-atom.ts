@@ -7,4 +7,7 @@ export type Post = {
     createdAt: string;
 }
 
+export const allPostsAtom = atom<Post[]>([]);
+export const displayedPostsAtom = atom<Post[]>([]);
+
 export const limitPerPageAtom = atom<number>(5);
