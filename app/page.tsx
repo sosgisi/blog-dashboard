@@ -29,7 +29,7 @@ export default function Home() {
 
   return (
     <>
-    <Navbar/>
+    <Navbar searchBar={false}/>
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-5 overflow-y-auto">
         { blogs ? blogs.map((blog:any, i:number) => (

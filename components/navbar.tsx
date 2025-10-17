@@ -1,8 +1,11 @@
+'use client'
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Search from "./search";
 
-export default function Navbar(){
+export default function Navbar({searchBar}: {searchBar?: boolean}) {
 
     const pathname = usePathname();
 
@@ -19,8 +22,11 @@ export default function Navbar(){
     }, [pathname])
 
     return(
-        <nav className="h-16 bg-foreground/20 flex justify-between items-center m-5 px-5 rounded-full shadow-2xl backdrop-blur-md">
+        <nav className="h-16 bg-foreground/20 flex justify-between items-center m-5 px-5 rounded-full shadow-md backdrop-blur-md">
             <h1 className="text-2xl font-bold">{title}</h1>
+
+            {searchBar && <Search placeholder="search..." /> }
+
             <ul className="flex gap-5">
                 <li>
                     <Link href="/" className={`${pathname==='/' ? 'text-foreground' : 'text-foreground/70'} hover:text-foreground transform duration-200`}>Blogs</Link>

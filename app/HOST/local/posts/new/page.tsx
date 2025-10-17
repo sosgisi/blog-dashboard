@@ -2,7 +2,7 @@
 
 import { toastAtom } from "@/atoms/toast-atom";
 import { Button } from "@mui/material";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -11,7 +11,7 @@ export default function NewPostsPage() {
 
     const router = useRouter();
 
-    const setToasts = useSetAtom(toastAtom)
+    const setToasts = useSetAtom(toastAtom);
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -48,7 +48,7 @@ export default function NewPostsPage() {
         }
 
         const updatedPosts = [...previousPosts, newPost];
-
+        
         localStorage.setItem('posts', JSON.stringify(updatedPosts));
         setToasts((prev) => [...prev, {id: Date.now(), message: "Post created successfully!", type: "success"}]);
 
@@ -73,8 +73,9 @@ export default function NewPostsPage() {
                         <label>Content</label>
                         <textarea name="editor" id="editor" value={content} onChange={(e) => setContent(e.target.value)} className="w-full h-full p-2 border border-gray-400 rounded outline-none"></textarea>
                     </div>
-                    <div className="relative w-1/2 h-full p-3 bg-foreground/90 text-background rounded-md">
+                    <div className="relative w-1/2 h-full p-3 bg-background rounded-md">
                         <h1 className="absolute text-sm right-3 opacity-50 cursor-default">Preview</h1>
+                        {/* <h1 className="absolute text-sm right-3 opacity-50 cursor-default">Preview</h1> */}
                         <h1 className="mt-13 text-xl">
                             <ReactMarkdown>{title}</ReactMarkdown>
                         </h1>
