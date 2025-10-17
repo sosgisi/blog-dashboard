@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import Search from "./search";
+import Search from "./ui/search";
 import ThemeToggle from "./ui/theme-toggle";
 
 export default function Navbar({searchBar}: {searchBar?: boolean}) {
@@ -25,7 +25,7 @@ export default function Navbar({searchBar}: {searchBar?: boolean}) {
     return(
         <>
         <nav className="h-16 bg-foreground/20 flex justify-between items-center m-5 px-5 rounded-full shadow-md backdrop-blur-md">
-            <h1 className="text-xl sm:text-2xl font-bold">{title}</h1>
+            <h1 data-testid="navbar-title" className="text-xl sm:text-2xl font-bold">{title}</h1>
 
             <div className="hidden sm:flex">
                 {searchBar && <Search placeholder="search..." /> }

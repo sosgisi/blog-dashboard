@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar";
 import { use, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@mui/material";
-import DeleteConfirmation from "@/components/delete-confirmation";
+import DeleteConfirmation from "@/components/pop-ups/delete-confirmation";
 import { atom, useSetAtom } from "jotai";
 import { Post } from "@/atoms/posts-atom";
 

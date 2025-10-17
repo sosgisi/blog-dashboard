@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ToastNotification from "@/components/toast-notification";
+import ToastNotification from "@/components/pop-ups/toast-notification";
 
 export const metadata: Metadata = {
   title: "Create Next App",
